@@ -1694,6 +1694,7 @@ void process_commands()
         current_position[Z_AXIS] = destination[Z_AXIS];
         current_position[E_AXIS] = destination[E_AXIS];
 	}
+	SERIAL_PROTOCOLLN("RequestPause: Please change filament");
 	break;
     case 601: //Unpark head after pause or filament change - R[pre-move retract] E[post-move extrude]
     {
