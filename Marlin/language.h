@@ -173,6 +173,7 @@
 	#define MSG_M119_REPORT "Reporting endstop status"
 	#define MSG_ENDSTOP_HIT "TRIGGERED"
 	#define MSG_ENDSTOP_OPEN "open"
+	#define MSG_NO_SAVED_POSITION "Cannot unpark - no saved position" 
 	#define MSG_HOTEND_OFFSET "Hotend offsets:"
 
 	#define MSG_SD_CANT_OPEN_SUBDIR "Cannot open subdir"
