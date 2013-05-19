@@ -1,9 +1,21 @@
 #Marlin firmware for Solidoodle 2/3
 Previous official Solidoodle firmware was based on early version of Marlin and could not be altered to accomodate a Panelolu LCD screen and encoder without many errors. This version has configuration.h and configuration_adv.h altered to reflect all changes found in official Solidoodle firmware.
 
+##Modifications to this Firmware:
+  *	  All Solidoodle Specific Patches marked with {SD Patch} [lawsy]
+  *	  Added Solidoodle 2/3 version toggle to auto-set Home/Bed/Filament Change location [Rincewind]
+  *	  Added ZWobble and Hysterisis Fixes [Tealvince/Rincewind]
+  *	  Added a feature to allow you to park the extruder head by safely moving it to a parking position. [Adrian]
+      You can use this function for instance to clean the drive gear or change filament. Changing filament allows you to replace a nearly depleted spool or to change the filament entirely for multi-colored prints.
+      [Patch imported from work by "buildrob" https://github.com/buildrob/Marlin_M600 ]
+  **   M600 - Park head to allow filament change or pause of print [Defaults to home position based on SD2 or SD3]
+  **   M601 - Unpark head to resume printing
+  **   M602 - Turn on/off extruder motors (e.g., for cleaning)
+  **   M603 - Display LCD alert, sound beeper and wait for button press.
+
 ##Step 1
 
-You need to have the Arduino0022 IDE installed. If you have a later version, you'll need to downgrade.
+You need to have the IDE installed. Arduino 0022 was previously recommended, but this version works with Arduino 1.X if you update your hardware files from the Arduino folder
 Download from:
 -http://arduino.cc/hu/Main/Software
 
@@ -11,7 +23,7 @@ Download from:
 
 A version of Arduino022 already setup for this firmware is now available again at: http://www.mediafire.com/?3qy0wjf86a66du8 .
 
-A version of Arduino 1.03 already setup for this firmware is now available at: .
+A version of Arduino 1.03 already setup for this firmware is now available at: TBA.
 
 Simply unzip into a folder of your choice.
 
