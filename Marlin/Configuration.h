@@ -12,7 +12,7 @@
 #define STRING_CONFIG_H_AUTHOR "Lawsy/Rincewind/Tealvince/Adrian" //Who made the changes.
 
 // change to 3 for SD3 //{SD Patch}
-#define SOLIDOODLE_VERSION 2 //{SD Patch}
+#define SOLIDOODLE_VERSION 3 //{SD Patch}
 
 // SERIAL_PORT selects which serial port should be used for communication with the host.
 // This allows the connection of wireless adapters (for instance) to non-default port pins.
@@ -51,7 +51,7 @@
 // 301 = Rambo
 
 #ifndef MOTHERBOARD
-#define MOTHERBOARD 62 //{SD Patch}
+#define MOTHERBOARD 34 //{SD Patch}
 #endif
 
 //// The following define selects which power supply you have. Please choose the one that matches your setup
@@ -91,7 +91,7 @@
 #define TEMP_SENSOR_0 6 //{SD Patch}
 #define TEMP_SENSOR_1 0
 #define TEMP_SENSOR_2 0
-#define TEMP_SENSOR_BED 6 //{SD Patch}
+#define TEMP_SENSOR_BED 80 //{SD Patch}
 
 // Actual temperature must be close to target for this long before M109 returns success
 #define TEMP_RESIDENCY_TIME 5	// (seconds) //{SD Patch}
@@ -359,7 +359,7 @@ const bool Z_ENDSTOPS_INVERTING = false; //{SD Patch} // set to true to invert t
 //LCD and SD support
 //#define ULTRA_LCD  //general lcd support, also 16x2
 //#define DOGLCD	// Support for SPI LCD 128x64 (Controller ST7565R graphic Display Family)
-//#define SDSUPPORT // Enable SD Card Support in Hardware Console
+#define SDSUPPORT // Enable SD Card Support in Hardware Console
 //#define SDSLOW // Use slower SD transfer mode (not normally needed - uncomment if you're getting volume init error)
 
 //#define ULTIMAKERCONTROLLER //as available from the ultimaker online store.
@@ -367,7 +367,7 @@ const bool Z_ENDSTOPS_INVERTING = false; //{SD Patch} // set to true to invert t
 
 // The RepRapDiscount Smart Controller (white PCB)
 // http://reprap.org/wiki/RepRapDiscount_Smart_Controller
-//#define REPRAP_DISCOUNT_SMART_CONTROLLER
+#define REPRAP_DISCOUNT_SMART_CONTROLLER
 
 // The GADGETS3D G3D LCD/SD Controller (blue PCB)
 // http://reprap.org/wiki/RAMPS_1.3/1.4_GADGETS3D_Shield_with_Panel
