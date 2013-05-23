@@ -366,7 +366,7 @@ const bool Z_ENDSTOPS_INVERTING = false; //{SD Patch} // set to true to invert t
 //#define ULTIPANEL  //the ultipanel as on thingiverse
 
 // The RepRapDiscount Smart Controller (white PCB)
-// http://reprap.org/wiki/RepRapDiscount_Smart_Controller
+// http://reprap.org/wiki/RepRapDiscount_Smart_Controller (+53476 Bytes)
 //#define REPRAP_DISCOUNT_SMART_CONTROLLER
 
 // The GADGETS3D G3D LCD/SD Controller (blue PCB)
@@ -374,7 +374,7 @@ const bool Z_ENDSTOPS_INVERTING = false; //{SD Patch} // set to true to invert t
 //#define G3D_PANEL
 
 // The RepRapDiscount FULL GRAPHIC Smart Controller (quadratic white PCB)
-// http://reprap.org/wiki/RepRapDiscount_Full_Graphic_Smart_Controller
+// http://reprap.org/wiki/RepRapDiscount_Full_Graphic_Smart_Controller (+69006 Bytes)
 //
 // ==> REMEMBER TO INSTALL U8glib to your ARDUINO library folder: http://code.google.com/p/u8glib/wiki/u8glib
 //#define REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
@@ -433,7 +433,19 @@ const bool Z_ENDSTOPS_INVERTING = false; //{SD Patch} // set to true to invert t
 
 // SF send wrong arc g-codes when using Arc Point as fillet procedure
 //#define SF_ARC_FIX
-// Enable support for head parking/print pausing/filament changeover support (M600 + M601)
+
+// Enable support for either of the Z-Wobble Solutions
+//#define ZWOBBLE_PATCH //{SD Patch} (+5528 Bytes)
+#define HYSTERESIS_PATCH //{SD Patch}(+1592 Bytes)
+
+// Filament Alarm Pin (+684 Bytes)
+// Must ensure PARK_HEAD_ENABLE is defined below as well!
+//#define FILAMENT_ALARM_PIN 63 //RAMPS Pin for Microswitch on Filament Feed. D63 on AUX2 with a GND next to it.
+#define FILAMENT_ALARM_PIN 4 //Sang Pin for Microswitch on Filament Feed. A4 pin, with a GND Next to it.
+#define PAUSE_HEATER_DELAY 300 //Delay until heater disabled when paused in seconds
+
+// Enable support for head parking/print pausing/filament changeover support (M600 + M601) (+2780 Bytes)
+// REQUIRED FOR FILAMENT_ALARM!
 #define PARK_HEAD_ENABLE
 
 #include "Configuration_adv.h"

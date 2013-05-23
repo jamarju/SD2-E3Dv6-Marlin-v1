@@ -39,8 +39,12 @@
 #include "ConfigurationStore.h"
 #include "language.h"
 #include "pins_arduino.h"
+#ifdef ZWOBBLE_PATCH
 #include "ZWobble.h" //{SD Patch}
+#endif
+#ifdef HYSTERESIS_PATCH
 #include "Hysteresis.h" //{SD Patch}
+#endif
 
 #if DIGIPOTSS_PIN > -1
 #include <SPI.h>
@@ -223,9 +227,9 @@ static unsigned long stepper_inactive_time = DEFAULT_STEPPER_DEACTIVE_TIME*1000l
 
 unsigned long starttime=0;
 unsigned long stoptime=0;
+unsigned long pausetime=0;
 
 static uint8_t tmp_extruder;
-
 
 bool Stopped=false;
 
@@ -295,6 +299,16 @@ void enquecommand_P(const char *cmd)
   }
 }
 
+void setup_filament_alarmpin()
+{
+#ifdef FILAMENT_ALARM_PIN
+  #if( FILAMENT_ALARM_PIN>-1 )
+	pinMode(FILAMENT_ALARM_PIN,INPUT);
+	WRITE(FILAMENT_ALARM_PIN,HIGH);
+  #endif
+#endif
+}
+
 void setup_killpin()
 {
   #if( KILL_PIN>-1 )
@@ -339,7 +353,7 @@ void suicide()
 
 void setup()
 {
-  setup_killpin(); 
+  setup_killpin();
   setup_powerhold();
   MYSERIAL.begin(BAUDRATE);
   SERIAL_PROTOCOLLNPGM("start");
@@ -385,6 +399,7 @@ void setup()
   watchdog_init();
   st_init();    // Initialize stepper, this enables interrupts!
   setup_photpin();
+  setup_filament_alarmpin();
   
   lcd_init();
   
@@ -452,6 +467,9 @@ void loop()
   manage_heater();
   manage_inactivity();
   checkHitEndstops();
+#ifdef FILAMENT_ALARM_PIN
+    filament_alarm();
+#endif
   lcd_update();
 }
 
@@ -893,8 +911,12 @@ void process_commands()
   {
     switch( (int)code_value() ) 
     {
+    #ifdef ZWOBBLE_PATCH
     DECLARE_ZWOBBLE_MCODES(96, 97) //{SD Patch}
+    #endif
+    #ifdef HYSTERESIS_PATCH
     DECLARE_HYSTERESIS_MCODES(98, 99) //{SD Patch}
+    #endif
     #ifdef ULTIPANEL
     case 0: // M0 - Unconditional stop - Wait for user button press on LCD
     case 1: // M1 - Conditional stop - Wait for user button press on LCD
@@ -1594,7 +1616,15 @@ void process_commands()
 #ifdef PARK_HEAD_ENABLE
     case 600: //Park head for pause or filament change X[pos] Y[pos] Z[relative lift] R[pre-move retract] E[post-move extrude]
 {
-    // save state
+
+	// Pause Repetier-Host
+    SERIAL_ECHO_START;
+    SERIAL_ECHOLN("Please change filament");
+    delay(1000); //Pause for 1 second to allow repetier host to catch up
+    //finish moves to flush buffer
+    st_synchronize();
+
+	// save state
     parked_state.pos[X_AXIS]=current_position[X_AXIS];
     parked_state.pos[Y_AXIS]=current_position[Y_AXIS];
     parked_state.pos[Z_AXIS]=current_position[Z_AXIS];
@@ -1685,16 +1715,15 @@ void process_commands()
             homing_feedrate[E_AXIS]/60, active_extruder);
           #endif
 
-        //finish moves
-        st_synchronize();
-
         // update current position
         current_position[X_AXIS] = destination[X_AXIS];
         current_position[Y_AXIS] = destination[Y_AXIS];
         current_position[Z_AXIS] = destination[Z_AXIS];
         current_position[E_AXIS] = destination[E_AXIS];
+
+        //finish moves
+        st_synchronize();
 	}
-	SERIAL_PROTOCOLLN("RequestPause: Please change filament");
 	break;
     case 601: //Unpark head after pause or filament change - R[pre-move retract] E[post-move extrude]
     {
@@ -1854,10 +1883,20 @@ void process_commands()
             WRITE(BEEPER,HIGH);
             delay(3);
             WRITE(BEEPER,LOW);
+            delay(3);
           }
           #endif
+          #if FILAMENT_ALARM_PIN > -1
+  		  //If sitting idle for > Delay, then disable everything hot
+  		  if(pausetime > 0){
+            if(((millis() - pausetime) >= (PAUSE_HEATER_DELAY*1000UL)) && (isHeatingHotend(0)) && (starttime > 0)) {
+  		  	  enquecommand_P(PSTR("M104 S0"));
+  			  SERIAL_ECHO_START;
+  			  SERIAL_ECHOLN("Extruder Heaters De-activated");
+  		    }
+  	  	  }
+          #endif
         }
-        
         lcd_reset_alert_level();
     }
     break;
@@ -2174,6 +2213,40 @@ void extruderFan()
 }
 #endif
 
+// Alarm function when filament alarm triggered
+#ifdef FILAMENT_ALARM_PIN
+unsigned long lastFA = 0; //Save the time for when the alarm pin was turned checked last
+
+void filament_alarm()
+{
+  if ((millis() - lastFA) >= 2500) //Not a time critical function, so we only check every 2500ms
+  {
+	lastFA = millis();
+	if( 0 == READ(FILAMENT_ALARM_PIN) ) {
+		if((pausetime == 0) && (starttime > 0)) {//If not already paused and an M109 command has been sent
+			pausetime = millis();
+			// Trigger Filament Change Actions
+			enquecommand_P(PSTR("M600\nM602 S0"));
+			SERIAL_ECHO_START;
+			SERIAL_ECHOLN("RequestPause: Filament Alarm");
+		}
+		//If sitting idle for > Delay, then disable everything hot
+		if(((millis() - pausetime) >= (PAUSE_HEATER_DELAY*1000UL)) && (isHeatingHotend(0)) && (starttime > 0)) {
+				enquecommand_P(PSTR("M104 S0"));
+				SERIAL_ECHO_START;
+				SERIAL_ECHOLN("Extruder Heaters De-activated");
+		}
+	} else {
+		if ((pausetime > 0) && ((millis() - pausetime) >= 90000))		{
+			pausetime = 0;
+			SERIAL_ECHO_START;
+			SERIAL_ECHOLN("Filament Alarm Reset");
+		}
+	}
+  }
+}
+#endif
+
 void manage_inactivity() 
 { 
   if( (millis() - previous_millis_cmd) >  max_inactive_time ) 
@@ -2218,7 +2291,7 @@ void manage_inactivity()
      WRITE(E0_ENABLE_PIN,oldstatus);
     }
   #endif
-  check_axes_activity();
+    check_axes_activity();
 }
 
 void kill()

@@ -158,6 +158,7 @@ void ClearToSend();
 
 void get_coordinates();
 void prepare_move();
+void filament_alarm();
 void kill();
 void Stop();
 
@@ -196,6 +197,7 @@ extern float retract_recover_length, retract_recover_feedrate;
 
 extern unsigned long starttime;
 extern unsigned long stoptime;
+extern unsigned long pausetime;
 
 // Handling multiple extruders pins
 extern uint8_t active_extruder;
