@@ -37,6 +37,9 @@ extern int target_temperature[EXTRUDERS];
 extern float current_temperature[EXTRUDERS];
 extern int target_temperature_bed;
 extern float current_temperature_bed;
+#ifdef TEMP_SENSOR_1_AS_REDUNDANT
+  extern float redundant_temperature;
+#endif
 
 #ifdef PIDTEMP
   extern float Kp,Ki,Kd,Kc;
@@ -48,6 +51,11 @@ extern float current_temperature_bed;
 #endif
 #ifdef PIDTEMPBED
   extern float bedKp,bedKi,bedKd;
+#endif
+  
+  
+#ifdef BABYSTEPPING
+  extern volatile int babystepsTodo[3];
 #endif
   
 //high level conversion routines, for use outside of temperature.cpp

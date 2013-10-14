@@ -3,10 +3,10 @@ applet/
 *~
 *.orig
 *.rej
-/.settings
+*.bak
+/arduino
+/Libraries
 /Release
 /.cproject
 /.project
-/Solidoodle_Marlin.cpp
-/Solidoodle_Marlin.h
-/arduino
+/.settings
