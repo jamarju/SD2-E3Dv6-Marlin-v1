@@ -73,7 +73,7 @@
 // Original Solidoodle w/ Sanguinololu shipped pre June 2013 - Choose 62
 // Solidoodle w/ Printrboard shipped post June 2013 - Choose 81
 #ifndef MOTHERBOARD
-#define MOTHERBOARD 34
+#define MOTHERBOARD 62
 #endif
 
 // Define this to set a custom name for your generic Mendel,
