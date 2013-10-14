@@ -494,13 +494,13 @@
   #if MOTHERBOARD == 35
     #define HEATER_0_PIN       8
   #else
-    #define HEATER_0_PIN       10   // EXTRUDER 1
+    #define HEATER_0_PIN       9   // EXTRUDER 1
   #endif
 
   #if MOTHERBOARD == 33 || MOTHERBOARD == 67
     #define HEATER_1_PIN       -1
   #else
-    #define HEATER_1_PIN       9    // EXTRUDER 2 (FAN On Sprinter)
+    #define HEATER_1_PIN       10    // EXTRUDER 2 (FAN On Sprinter)
   #endif
 
   #define HEATER_2_PIN       -1 
