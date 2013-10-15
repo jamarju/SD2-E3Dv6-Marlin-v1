@@ -57,7 +57,12 @@
 #include "temperature.h"
 #include "ultralcd.h"
 #include "language.h"
-
+#ifdef ZWOBBLE_PATCH
+  #include "ZWobble.h" //{SD Patch}
+#endif
+#ifdef HYSTERESIS_PATCH
+  #include "Hysteresis.h" //{SD Patch}
+#endif
 //===========================================================================
 //=============================public variables ============================
 //===========================================================================
