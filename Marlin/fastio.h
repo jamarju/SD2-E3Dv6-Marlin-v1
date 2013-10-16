@@ -2027,7 +2027,7 @@ pins
 #define	SCK					DIO9
 #define	MISO				DIO11
 #define	MOSI				DIO10
-#define	SS					DIO8
+#define	SS					DIO14
 
 // change for your board
 #define	DEBUG_LED		DIO31 /* led D5 red */
