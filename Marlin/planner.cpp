@@ -533,14 +533,6 @@ void plan_buffer_line(float x, float y, float z, const float &e, float feed_rate
 void plan_buffer_line(const float &x, const float &y, const float &z, const float &e, float feed_rate, const uint8_t &extruder)
 #endif  //ENABLE_AUTO_BED_LEVELING
 {
-
-#ifdef ZWOBBLE_PATCH
-  zwobble.InsertCorrection(z); //{SD Patch}
-#endif
-#ifdef HYSTERESIS_PATCH
-  hysteresis.InsertCorrection(x,y,z,e); //{SD Patch}
-#endif
-
 	// Calculate the buffer head after we push this byte
   int next_buffer_head = next_block_index(block_buffer_head);
 
@@ -556,6 +548,13 @@ void plan_buffer_line(const float &x, const float &y, const float &z, const floa
 #ifdef ENABLE_AUTO_BED_LEVELING
   apply_rotation_xyz(plan_bed_level_matrix, x, y, z);
 #endif // ENABLE_AUTO_BED_LEVELING
+
+#ifdef ZWOBBLE_PATCH
+  zwobble.InsertCorrection(z); //{SD Patch}
+#endif
+#ifdef HYSTERESIS_PATCH
+  hysteresis.InsertCorrection(x,y,z,e); //{SD Patch}
+#endif
 
   // The target position of the tool in absolute steps
   // Calculate target position in absolute steps
