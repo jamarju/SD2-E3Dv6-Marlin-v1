@@ -1,6 +1,6 @@
 #Marlin firmware for Solidoodle 2/3
 Previous official Solidoodle firmware was based on early version of Marlin and could not be altered to accomodate a Panelolu LCD screen and encoder without many errors. This version has configuration.h and configuration_adv.h altered to reflect all changes found in official Solidoodle firmware.
-
+Marlin has a GPL license because I believe in open development.
 ##Step 1
 
 You need to have the Arduino0022 IDE installed. If you have a later version, you'll need to downgrade.
@@ -332,13 +332,14 @@ Configuring and compilation:
 Install the arduino software IDE/toolset v23 (Some configurations also work with 1.x.x)
    http://www.arduino.cc/en/Main/Software
 
+Download the Marlin firmware
+   https://github.com/ErikZalm/Marlin/tree/Marlin_v1
+   Use the "Download Zip" button on the right.
+
 For gen6/gen7 and sanguinololu the Sanguino directory in the Marlin dir needs to be copied to the arduino environment.
   copy ArduinoAddons\Arduino_x.x.x\sanguino <arduino home>\hardware\Sanguino
 
 Copy the Marlin firmware
-   https://github.com/ErikZalm/Marlin/tree/Marlin_v1
-   (Use the download button)
-
 Start the arduino IDE.
 Select Tools -> Board -> Arduino Mega 2560    or your microcontroller
 Select the correct serial port in Tools ->Serial Port
@@ -372,6 +373,13 @@ In order to get the servo working, you need to enable:
 The first define tells firmware how many servos you have.
 The second tells what axis this servo will be attached to. In the example above, we have a servo in Z axis.
 The third one tells the angle in 2 situations: Probing (165º) and resting (60º). Check this with command M280 P0 S{angle} (example: M280 P0 S60 moves the servo to 60º)
+
+*For RAMPS users:*
+By default, RAMPS have no power on servo bus (if you happen to have a multimeter, check the voltage on servo power pins).
+In order to get the servo working, you need to supply 5V to 5V pin.. You can do it using your power supply (if it has a 5V output) or jumping the "Vcc" from Arduino to the 5V RAMPS rail.
+These 2 pins are located just between the Reset Button and the yellow fuses... There are marks in the board showing 5V and VCC.. just connect them..
+If jumping the arduino Vcc do RAMPS 5V rail, take care to not use a power hungry servo, otherwise you will cause a blackout in the arduino board ;-)
+
 
 Next you need to define the Z endstop (probe) offset from hotend.
 My preferred method:
@@ -413,3 +421,7 @@ and then lifted when traveling from first to second and second to third point by
 All values are in mm as usual. 
 
 That's it.. enjoy never having to calibrate your Z endstop neither leveling your bed by hand anymore ;-)
+
+
+
+

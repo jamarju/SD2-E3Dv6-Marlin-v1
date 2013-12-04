@@ -31,8 +31,12 @@
 #define SERIAL_PORT 0
 
 // This determines the communication speed of the printer
+// This determines the communication speed of the printer
 #define BAUDRATE 250000
-//#define BAUDRATE 115200
+
+// This enables the serial port associated to the Bluetooth interface
+//#define BTENABLED              // Enable BT interface on AT90USB devices
+
 
 //// The following define selects which electronics board you have. Please choose the one that matches your setup
 // 10 = Gen7 custom (Alfons3 Version) "https://github.com/Alfons3/Generation_7_Electronics"
@@ -61,6 +65,7 @@
 // 80 = Rumba
 // 81 = Printrboard (AT90USB1286)
 // 82 = Brainwave (AT90USB646)
+// 83 = SAV Mk-I (AT90USB1286)
 // 9  = Gen3+
 // 70 = Megatronics
 // 701= Megatronics v2.0
@@ -79,6 +84,10 @@
 // Define this to set a custom name for your generic Mendel,
 // #define CUSTOM_MENDEL_NAME "This Mendel"
 
+// Define this to set a unique identifier for this printer, (Used by some programs to differentiate between machines)
+// You can use an online service to generate a random UUID. (eg http://www.uuidgenerator.net/version4)
+// #define MACHINE_UUID "00000000-0000-0000-0000-000000000000"
+
 // This defines the number of extruders
 #define EXTRUDERS 1
 
@@ -87,6 +96,9 @@
 // 2 = X-Box 360 203Watts (the blue wire connected to PS_ON and the red wire to VCC)
 
 #define POWER_SUPPLY 2
+
+// Define this to have the electronics keep the powersupply off on startup. If you don't know what this is leave it.
+// #define PS_DEFAULT_OFF
 
 //===========================================================================
 //=============================Thermal Settings  ============================
@@ -102,7 +114,7 @@
 // 2 is 200k thermistor - ATC Semitec 204GT-2 (4.7k pullup)
 // 3 is mendel-parts thermistor (4.7k pullup)
 // 4 is 10k thermistor !! do not use it for a hotend. It gives bad resolution at high temp. !!
-// 5 is 100K thermistor - ATC Semitec 104GT-2 (Used in ParCan) (4.7k pullup)
+// 5 is 100K thermistor - ATC Semitec 104GT-2 (Used in ParCan & J-Head) (4.7k pullup)
 // 6 is 100k EPCOS - Not as accurate as table 1 (created using a fluke thermocouple) (4.7k pullup)
 // 7 is 100k Honeywell thermistor 135-104LAG-J01 (4.7k pullup)
 // 71 is 100k Honeywell thermistor 135-104LAF-J01 (4.7k pullup)
@@ -115,12 +127,16 @@
 //                          (but gives greater accuracy and more stable PID)
 // 51 is 100k thermistor - EPCOS (1k pullup)
 // 52 is 200k thermistor - ATC Semitec 204GT-2 (1k pullup)
-// 55 is 100k thermistor - ATC Semitec 104GT-2 (Used in ParCan) (1k pullup)
+// 55 is 100k thermistor - ATC Semitec 104GT-2 (Used in ParCan & J-Head) (1k pullup)
 
 #define TEMP_SENSOR_0 1		//{SD Patch}
-#define TEMP_SENSOR_1 0
+#define TEMP_SENSOR_1 -1
 #define TEMP_SENSOR_2 0
 #define TEMP_SENSOR_BED 1	//{SD Patch}
+
+// This makes temp sensor 1 a redundant sensor for sensor 0. If the temperatures difference between these sensors is to high the print will be aborted.
+//#define TEMP_SENSOR_1_AS_REDUNDANT
+#define MAX_REDUNDANT_TEMP_SENSOR_DIFF 10
 
 // This makes temp sensor 1 a redundant sensor for sensor 0. If the temperatures difference between these sensors is to high the print will be aborted.
 //#define TEMP_SENSOR_1_AS_REDUNDANT
@@ -341,7 +357,10 @@ const bool Z_MAX_ENDSTOP_INVERTING = false; // set to true to invert the logic o
   #define X_PROBE_OFFSET_FROM_EXTRUDER -25
   #define Y_PROBE_OFFSET_FROM_EXTRUDER -29
   #define Z_PROBE_OFFSET_FROM_EXTRUDER -12.35
-  
+
+  #define Z_RAISE_BEFORE_HOMING 4       // (in mm) Raise Z before homing (G28) for Probe Clearance.
+                                        // Be sure you have this distance over your Z_MAX_POS in case
+    
   #define XY_TRAVEL_SPEED 8000         // X and Y axis travel speed between probes, in mm/min
   
   #define Z_RAISE_BEFORE_PROBING 15    //How much the extruder will be raised before traveling to the first probing point.
@@ -353,6 +372,24 @@ const bool Z_MAX_ENDSTOP_INVERTING = false; // set to true to invert the logic o
   // You MUST HAVE the SERVO_ENDSTOPS defined to use here a value higher than zero otherwise your code will not compile.
 
 //  #define PROBE_SERVO_DEACTIVATION_DELAY 300  
+
+
+//If you have enabled the Bed Auto Levelling and are using the same Z Probe for Z Homing, 
+//it is highly recommended you let this Z_SAFE_HOMING enabled!!!
+
+  #define Z_SAFE_HOMING   // This feature is meant to avoid Z homing with probe outside the bed area. 
+                          // When defined, it will:
+                          // - Allow Z homing only after X and Y homing AND stepper drivers still enabled
+                          // - If stepper drivers timeout, it will need X and Y homing again before Z homing
+                          // - Position the probe in a defined XY point before Z Homing when homing all axis (G28)
+                          // - Block Z homing only when the probe is outside bed area.
+  
+  #ifdef Z_SAFE_HOMING
+    
+    #define Z_SAFE_HOMING_X_POINT (X_MAX_LENGTH/2)    // X point for Z homing when homing all axis (G28)
+    #define Z_SAFE_HOMING_Y_POINT (Y_MAX_LENGTH/2)    // Y point for Z homing when homing all axis (G28)
+    
+  #endif
   
 #endif
 
@@ -405,6 +442,10 @@ const bool Z_MAX_ENDSTOP_INVERTING = false; // set to true to invert the logic o
 //###############################
 //{SD Patch} END
 
+
+
+//{SD Patch} END
+
 //// MOVEMENT SETTINGS
 #define NUM_AXIS 4 // The axis order in all axis related arrays is X, Y, Z, E
 #define HOMING_FEEDRATE {50*60, 50*60, 4*60, 0}  // set the homing speeds (mm/min)
@@ -452,6 +493,15 @@ const bool Z_MAX_ENDSTOP_INVERTING = false; // set to true to invert the logic o
 #define ABS_PREHEAT_HOTEND_TEMP 190 //{SD Patch}
 #define ABS_PREHEAT_HPB_TEMP 95 //{SD Patch}
 #define ABS_PREHEAT_FAN_SPEED 255		// Insert Value between 0 and 255
+
+// Preheat Constants
+#define PLA_PREHEAT_HOTEND_TEMP 180
+#define PLA_PREHEAT_HPB_TEMP 70
+#define PLA_PREHEAT_FAN_SPEED 255   // Insert Value between 0 and 255
+
+#define ABS_PREHEAT_HOTEND_TEMP 240
+#define ABS_PREHEAT_HPB_TEMP 100
+#define ABS_PREHEAT_FAN_SPEED 255   // Insert Value between 0 and 255
 
 //LCD and SD support
 //#define ULTRA_LCD  //general lcd support, also 16x2
@@ -562,6 +612,30 @@ const bool Z_MAX_ENDSTOP_INVERTING = false; // set to true to invert the logic o
   #define ULTIPANEL
 #endif
 
+// Shift register panels
+// ---------------------
+// 2 wire Non-latching LCD SR from:
+// https://bitbucket.org/fmalpartida/new-liquidcrystal/wiki/schematics#!shiftregister-connection 
+//#define SR_LCD
+#ifdef SR_LCD
+   #define SR_LCD_2W_NL    // Non latching 2 wire shiftregister
+   //#define NEWPANEL
+#endif
+
+// Panucatt VIKI LCD with status LEDs, integrated click & L/R/U/P buttons, separate encoder inputs
+//#define LCD_I2C_VIKI
+#ifdef LCD_I2C_VIKI
+  // This uses the LiquidTWI2 library v1.2.3 or later ( https://github.com/lincomatic/LiquidTWI2 )
+  // Make sure the LiquidTWI2 directory is placed in the Arduino or Sketchbook libraries subdirectory.
+  // Note: The pause/stop/resume LCD button pin should be connected to the Arduino
+  //       BTN_ENC pin (or set BTN_ENC to -1 if not used)
+  #define LCD_I2C_TYPE_MCP23017
+  #define LCD_I2C_ADDRESS 0x20 // I2C Address of the port expander
+  #define LCD_USE_I2C_BUZZER //comment out to disable buzzer on LCD (requires LiquidTWI2 v1.2.3 or later)
+  #define NEWPANEL
+  #define ULTIPANEL
+#endif
+
 #ifdef ULTIPANEL
 //  #define NEWPANEL  //enable this if you have a click-encoder panel
   #define SDSUPPORT
@@ -595,6 +669,11 @@ const bool Z_MAX_ENDSTOP_INVERTING = false; // set to true to invert the logic o
 // Increase the FAN pwm frequency. Removes the PWM noise but increases heating in the FET/Arduino
 //#define FAST_PWM_FAN
 
+// Temperature status leds that display the hotend and bet temperature.
+// If alle hotends and bed temperature and temperature setpoint are < 54C then the BLUE led is on.
+// Otherwise the RED led is on. There is 1C hysteresis.
+//#define TEMP_STAT_LEDS
+
 // Use software PWM to drive the fan, as for the heaters. This uses a very low frequency
 // which is not ass annoying as with the hardware PWM. On the other hand, if this frequency
 // is too low, you should also increment SOFT_PWM_SCALE.
@@ -616,6 +695,8 @@ const bool Z_MAX_ENDSTOP_INVERTING = false; // set to true to invert the logic o
 // Support for the BariCUDA Paste Extruder.
 //#define BARICUDA
 
+//define BlinkM/CyzRgb Support
+//#define BLINKM
 
 /*********************************************************************\
 * R/C SERVO support
