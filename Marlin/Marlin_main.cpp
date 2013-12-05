@@ -1902,17 +1902,6 @@ void process_commands()
 
     #if defined(PS_ON_PIN) && PS_ON_PIN > -1
       case 80: // M80 - Turn on Power Supply
-        #ifdef ULTIPANEL
-          powersupply = true;
-          LCD_MESSAGEPGM(WELCOME_MSG);
-          lcd_update();
-        #endif
-          break;
-      #endif //HEATER_2_PIN
-    #endif
-
-    #if defined(PS_ON_PIN) && PS_ON_PIN > -1
-      case 80: // M80 - Turn on Power Supply
         SET_OUTPUT(PS_ON_PIN); //GND
         WRITE(PS_ON_PIN, PS_ON_AWAKE);
 

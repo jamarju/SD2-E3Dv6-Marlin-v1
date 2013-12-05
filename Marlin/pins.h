@@ -434,10 +434,6 @@
 
   #else
 
-    #define BEEPER             33    
-
-  #else
-
     #define X_STEP_PIN         54
     #define X_DIR_PIN          55
     #define X_ENABLE_PIN       38
