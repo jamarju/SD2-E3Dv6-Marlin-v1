@@ -89,8 +89,6 @@ static void menu_action_setting_edit_callback_long5(const char* pstr, unsigned l
 
 #define ENCODER_FEEDRATE_DEADZONE 10
 
-#define ENCODER_FEEDRATE_DEADZONE 10
-
 #if !defined(LCD_I2C_VIKI)
   #define ENCODER_STEPS_PER_MENU_ITEM 5
   #ifndef ENCODER_PULSES_PER_STEP
