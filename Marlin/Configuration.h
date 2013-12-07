@@ -458,9 +458,9 @@ const bool Z_MAX_ENDSTOP_INVERTING = false; // set to true to invert the logic o
 // default settings
 
 #define DEFAULT_AXIS_STEPS_PER_UNIT   {88,88,2268,138}  // default steps per unit for Ultimaker {SD Patch}
-#define AXIS_STEPS_NEGATIVE           {78.7402,100.7402,200.0*8/3,760*1.1} // Step values to be used when travelling in the negative direction. Useful for threadless ball screws. Comment out if not needed
-#define DEFAULT_MAX_FEEDRATE          {500, 500, 5, 25}    // (mm/sec)
-#define DEFAULT_MAX_ACCELERATION      {9000,9000,100,10000}    // X, Y, Z, E maximum start speed for accelerated moves. E default values are good for skeinforge 40+, for older versions raise them a lot.
+//#define AXIS_STEPS_NEGATIVE           {88,88,2268,138} // Step values to be used when travelling in the negative direction. Useful for threadless ball screws. Comment out if not needed
+#define DEFAULT_MAX_FEEDRATE          {500, 500, 5, 45}    // (mm/sec) {SD Patch}
+#define DEFAULT_MAX_ACCELERATION      {1200,1200,100,10000}    // X, Y, Z, E maximum start speed for accelerated moves. E default values are good for skeinforge 40+, for older versions raise them a lot. {SD Patch}
 
 #define DEFAULT_ACCELERATION          1000    // X, Y, Z and E max acceleration in mm/s^2 for printing moves {SD Patch}
 #define DEFAULT_RETRACT_ACCELERATION  1000   // X, Y, Z and E max acceleration in mm/s^2 for retracts {SD Patch}
