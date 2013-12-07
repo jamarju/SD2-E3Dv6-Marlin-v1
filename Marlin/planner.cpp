@@ -67,6 +67,10 @@
 //=============================public variables ============================
 //===========================================================================
 
+#ifdef AXIS_STEPS_NEGATIVE
+float negative_axis_steps_per_unit[] = AXIS_STEPS_NEGATIVE;
+#endif
+
 unsigned long minsegmenttime;
 float max_feedrate[4]; // set the max speeds
 float axis_steps_per_unit[4];
@@ -565,6 +569,17 @@ void plan_buffer_line(const float &x, const float &y, const float &z, const floa
   target[Z_AXIS] = lround(z*axis_steps_per_unit[Z_AXIS]);     
   target[E_AXIS] = lround(e*axis_steps_per_unit[E_AXIS]);
 
+// if movement is asymmetric in any axis, trick the position so that the travel happens with the correct amount of steps
+#ifdef AXIS_STEPS_NEGATIVE
+  for (int ax=0; ax<=NUM_AXIS; ax++)
+  {
+    if (target[ax] < position[ax])
+    {
+      position[ax] -= lround((target[ax]-position[ax])*(negative_axis_steps_per_unit[ax]/axis_steps_per_unit[ax]-1));
+    }
+  }
+#endif
+  
   #ifdef PREVENT_DANGEROUS_EXTRUDE
   if(target[E_AXIS]!=position[E_AXIS])
   {
