@@ -29,7 +29,7 @@
 //
 // But it didn't work because MOTHERBOARD was set correctly to 62 in Configuration.h but then
 // pins.h changes it with a 6 god knows why, so this check wasn't working.
-#define MACHINE_NAME "Solidoodle"                                    //{SD Patch}
+#define MACHINE_NAME "SD2+E3Dv6"                                    //{SD Patch}
 #define FIRMWARE_URL "https://github.com/jamarju/SD2-E3Dv6-Marlin-v1/tree/E3Dv6"   //{SD Patch}
 
 #define STRINGIFY_(n) #n
@@ -151,7 +151,7 @@
 	#define MSG_HEATING_COMPLETE "Heating done."
 	#define MSG_BED_HEATING "Bed Heating."
 	#define MSG_BED_DONE "Bed done."
-	#define MSG_M115_REPORT "FIRMWARE_NAME:Marlin V1; Solidoodle mashup FIRMWARE_URL:" FIRMWARE_URL " PROTOCOL_VERSION:" PROTOCOL_VERSION " MACHINE_TYPE:" MACHINE_NAME " EXTRUDER_COUNT:" STRINGIFY(EXTRUDERS) "\n"
+	#define MSG_M115_REPORT "FIRMWARE_NAME:Marlin V1; FIRMWARE_URL:" FIRMWARE_URL " PROTOCOL_VERSION:" PROTOCOL_VERSION " MACHINE_TYPE:" MACHINE_NAME " EXTRUDER_COUNT:" STRINGIFY(EXTRUDERS) "\n"
 	#define MSG_COUNT_X " Count X: "
 	#define MSG_ERR_KILLED "Printer halted. kill() called!"
 	#define MSG_ERR_STOPPED "Printer stopped due to errors. Fix the error and use M999 to restart. (Temperature is reset. Set it after restarting)"

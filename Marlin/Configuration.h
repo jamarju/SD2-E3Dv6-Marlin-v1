@@ -441,7 +441,7 @@ const bool Z_ENDSTOPS_INVERTING = false; //{SD Patch} // set to true to invert t
 // Filament Alarm Pin (+684 Bytes)
 // Must ensure PARK_HEAD_ENABLE is defined below as well!
 //#define FILAMENT_ALARM_PIN 63 //RAMPS Pin for Microswitch on Filament Feed. D63 on AUX2 with a GND next to it.
-#define FILAMENT_ALARM_PIN 4 //Sang Pin for Microswitch on Filament Feed. A4 pin, with a GND Next to it.
+//#define FILAMENT_ALARM_PIN 4 //Sang Pin for Microswitch on Filament Feed. A4 pin, with a GND Next to it.
 #define PAUSE_HEATER_DELAY 300 //Delay until heater disabled when paused in seconds
 
 // Enable support for head parking/print pausing/filament changeover support (M600 + M601) (+2780 Bytes)
