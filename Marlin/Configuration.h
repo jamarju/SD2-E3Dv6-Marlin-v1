@@ -88,7 +88,7 @@
 // 55 is 100k thermistor - ATC Semitec 104GT-2 (Used in ParCan) (1k pullup)
 // 80 is QU-BD thermistor as found in QU-BD silicone bed
 
-#define TEMP_SENSOR_0 6 //{SD Patch}
+#define TEMP_SENSOR_0 5 //{SD Patch}
 #define TEMP_SENSOR_1 0
 #define TEMP_SENSOR_2 0
 #define TEMP_SENSOR_BED 6 //{SD Patch}
@@ -109,7 +109,7 @@
 // When temperature exceeds max temp, your heater will be switched off.
 // This feature exists to protect your hotend from overheating accidentally, but *NOT* from thermistor short/failure!
 // You should use MINTEMP for thermistor short/failure protection.
-#define HEATER_0_MAXTEMP 225 //{SD Patch}
+#define HEATER_0_MAXTEMP 310 //{SD Patch}
 #define HEATER_1_MAXTEMP 275
 #define HEATER_2_MAXTEMP 275
 #define BED_MAXTEMP 110 //{SD Patch}
