@@ -1,3 +1,31 @@
+# SD2 + E3Dv6 extruder mod
+
+There are two branches in this repo:
+
+  * E3Dv6+cooler: changes for the Solidoodle 2 + E3Dv6 extruder plus PWM enabled on pin B12 for a cooling fan.
+  * E3Dv6: just the changes for the E3Dv6. No cooler.
+
+## Summary:
+
+  0. Use Arduino 22
+  1. Download this repo (Marlin fw) + sanguinololu above.
+  2. Copy sanguino to arduino/.../hardware, overwrite avrdude.conf with the one that comes with the sanguino repo (tools/...)
+  3. avrdude.conf errors out on line 531: comment all programmers that use "par" out.
+  4. Arduino -> board -> sanguino 644; serial port -> /dev/tty.usb-AH0...
+  5. Upload (should work even with the printer powered off)
+
+## Sources:
+
+Full instructions here: http://www.soliwiki.com/E3D_extruder#Set_up_Arduino_software
+
+Cooler fan how-to: https://solidoodletips.wordpress.com/2012/10/26/gcode-controlled-extruder-fan/
+
+Marlin fw cloned from: https://github.com/ozadr1an/Solidoodle-Marlin_v1.git
+
+Sanguinololu files for Arduino from: https://github.com/jmgiacalone/sanguino1284p.git
+
+Original README.md follows:
+
 #Marlin firmware for Solidoodle 2/3
 Previous official Solidoodle firmware was based on early version of Marlin and could not be altered to accomodate a Panelolu LCD screen and encoder without many errors. This version has configuration.h and configuration_adv.h altered to reflect all changes found in official Solidoodle firmware.
 
