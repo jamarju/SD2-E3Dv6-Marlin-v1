@@ -30,7 +30,7 @@
 // But it didn't work because MOTHERBOARD was set correctly to 62 in Configuration.h but then
 // pins.h changes it with a 6 god knows why, so this check wasn't working.
 #define MACHINE_NAME "Solidoodle"                                    //{SD Patch}
-#define FIRMWARE_URL "https://github.com/jamarju/SD2-E3Dv6-Marlin-v1/tree/E3Dv6+cooler"   //{SD Patch}
+#define FIRMWARE_URL "https://github.com/jamarju/SD2-E3Dv6-Marlin-v1/tree/E3Dv6"   //{SD Patch}
 
 #define STRINGIFY_(n) #n
 #define STRINGIFY(n) STRINGIFY_(n)
