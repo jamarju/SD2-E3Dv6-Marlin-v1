@@ -23,19 +23,14 @@
 
 #define PROTOCOL_VERSION "1.0"
 
-#if MOTHERBOARD == 7 || MOTHERBOARD == 71
-	#define MACHINE_NAME "Ultimaker"
-	#define FIRMWARE_URL "http://firmware.ultimaker.com"
-#elif MOTHERBOARD == 80
-	#define MACHINE_NAME "Rumba"
-	#define FIRMWARE_URL "https://github.com/ErikZalm/Marlin/"
-#elif MOTHERBOARD == 62 || MOTHERBOARD == 33 || MOTHERBOARD == 34        //{SD Patch}
-	#define MACHINE_NAME "Solidoodle"                                    //{SD Patch}
-    #define FIRMWARE_URL "http://github.com/mlaws/solidoodle2-marlin/"   //{SD Patch}
-#else
-	#define MACHINE_NAME "Mendel"
-	#define FIRMWARE_URL "http://www.mendel-parts.com"
-#endif
+// I hardcoded this, previously it was a lot of if/elifs among which:
+//
+// #elif MOTHERBOARD == 62 || MOTHERBOARD == 33 || MOTHERBOARD == 34        //{SD Patch}
+//
+// But it didn't work because MOTHERBOARD was set correctly to 62 in Configuration.h but then
+// pins.h changes it with a 6 god knows why, so this check wasn't working.
+#define MACHINE_NAME "Solidoodle"                                    //{SD Patch}
+#define FIRMWARE_URL "https://github.com/jamarju/SD2-E3Dv6-Marlin-v1/tree/E3Dv6+cooler"   //{SD Patch}
 
 #define STRINGIFY_(n) #n
 #define STRINGIFY(n) STRINGIFY_(n)
